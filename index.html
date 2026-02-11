@@ -30,7 +30,10 @@
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', sans-serif; transition: background-color 0.4s, color 0.4s; }
-        body { background-color: var(--bg-color); color: var(--text-color); overflow: hidden; /* Blocca scroll iniziale */ }
+        
+        html { scroll-behavior: smooth; } /* Rende lo scorrimento ai link fluido */
+
+        body { background-color: var(--bg-color); color: var(--text-color); overflow: hidden; }
 
         /* --- SCHERMATA DI SICUREZZA (GATE) --- */
         #gate {
@@ -50,22 +53,24 @@
         }
         #error-msg { color: #ff3b30; font-size: 14px; margin-top: 10px; display: none; }
 
-        /* --- CONTENUTO PRINCIPALE (Inizialmente nascosto) --- */
+        /* --- CONTENUTO PRINCIPALE --- */
         #main-content { opacity: 0; display: none; }
         #main-content.visible { opacity: 1; display: block; }
 
-        /* --- STILE CURRICULUM --- */
+        /* Navigazione */
         nav {
             position: fixed; top: 0; width: 100%; height: 52px; background: var(--nav-bg);
             backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
             z-index: 1000; display: flex; justify-content: space-between; align-items: center; padding: 0 10%;
             border-bottom: 1px solid var(--border-color);
         }
-        .nav-links a { color: var(--text-color); text-decoration: none; font-size: 12px; margin-right: 20px; opacity: 0.8; }
+        .nav-links { display: flex; gap: 20px; }
+        .nav-links a { color: var(--text-color); text-decoration: none; font-size: 12px; opacity: 0.8; font-weight: 400; transition: opacity 0.3s; }
+        .nav-links a:hover { opacity: 1; }
         
-        .theme-switch { display: inline-block; height: 24px; position: relative; width: 46px; }
+        .theme-switch { display: inline-block; height: 24px; position: relative; width: 46px; cursor: pointer; }
         .theme-switch input { display: none; }
-        .slider { background-color: var(--toggle-bg); position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0; transition: .4s; border-radius: 34px; }
+        .slider { background-color: var(--toggle-bg); position: absolute; top: 0; left: 0; right: 0; bottom: 0; transition: .4s; border-radius: 34px; }
         .slider:before { background-color: #fff; content: ""; height: 18px; width: 18px; left: 4px; bottom: 3px; position: absolute; transition: .4s; border-radius: 50%; box-shadow: 0 2px 4px rgba(0,0,0,0.2); }
         input:checked + .slider { background-color: var(--accent-color); }
         input:checked + .slider:before { transform: translateX(20px); }
@@ -85,12 +90,13 @@
         .qr-frame { background: white; padding: 20px; display: inline-block; border-radius: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); }
         .qr-frame img { width: 150px; height: 150px; }
 
-        #connect { min-height: 80vh; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; }
+        #connect { min-height: 100vh; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; }
         .contact-button {
             display: flex; align-items: center; justify-content: center; width: 100%; max-width: 350px;
             padding: 16px; margin: 10px 0; background: var(--card-bg); border: 1px solid var(--border-color);
-            border-radius: 16px; text-decoration: none; color: var(--text-color); font-weight: 600;
+            border-radius: 16px; text-decoration: none; color: var(--text-color); font-weight: 600; transition: transform 0.2s;
         }
+        .contact-button:hover { transform: scale(1.02); }
 
         .reveal { opacity: 0; transform: translateY(30px); transition: all 0.8s ease-out; }
         .reveal.active { opacity: 1; transform: translateY(0); }
@@ -113,8 +119,9 @@
     <div id="main-content">
         <nav>
             <div class="nav-links">
-                <a href="#about">Bio</a>
+                <a href="#main-content">Bio</a>
                 <a href="#cv">Curriculum</a>
+                <a href="#connect">Contatti</a> <!-- NUOVA SHORTCUT AGGIUNTA -->
             </div>
             <div class="theme-switch-wrapper">
                 <label class="theme-switch">
@@ -124,7 +131,7 @@
             </div>
         </nav>
 
-        <section class="hero">
+        <section class="hero" id="about">
             <h1 class="reveal">Il Tuo Nome.</h1>
             <p class="reveal">Esperienza e Competenze. Riservato.</p>
         </section>
@@ -142,15 +149,15 @@
                 <div class="card reveal">
                     <h3>Istruzione</h3>
                     <ul>
-                        <li>Laurea in... presso Università Z</li>
-                        <li>Diploma presso...</li>
+                        <li>Laurea presso Università Z</li>
+                        <li>Diploma specialistico</li>
                     </ul>
                 </div>
                 <div class="card reveal">
                     <h3>Certificazioni</h3>
                     <ul>
-                        <li>Certificato AWS / Google / Cisco</li>
-                        <li>Corso Specializzazione AI</li>
+                        <li>Certificato AWS / Google</li>
+                        <li>Corso Advanced AI</li>
                     </ul>
                 </div>
             </div>
@@ -173,19 +180,21 @@
             </div>
 
             <div class="card reveal" style="margin-top:25px;">
-                <h3>Patente di Guida</h3>
-                <ul><li>Categoria B</li></ul>
+                <h3>Altro</h3>
+                <ul><li>Patente Categoria B</li></ul>
             </div>
         </section>
 
         <section class="qr-container reveal">
             <h2>QR Code Personale</h2>
+            <p style="margin-bottom: 20px; color: var(--text-secondary);">Scansiona per salvare i contatti</p>
             <div class="qr-frame"><img id="qr-image" src=""></div>
         </section>
 
         <section id="connect">
-            <h2 class="reveal">Contattami</h2>
-            <a href="mailto:tua@email.com" class="contact-button reveal">Email</a>
+            <h2 class="reveal">Contatti Rapidi</h2>
+            <p class="reveal" style="color: var(--text-secondary); margin-bottom: 30px;">Canali di comunicazione preferenziali</p>
+            <a href="mailto:tua@email.com" class="contact-button reveal">Invia Email</a>
             <a href="#" class="contact-button reveal">LinkedIn</a>
             <a href="https://wa.me/tuonumero" class="contact-button reveal">WhatsApp</a>
         </section>
@@ -202,19 +211,18 @@
             if(val === ACCESS_CODE) {
                 document.getElementById('gate').style.display = 'none';
                 document.getElementById('main-content').classList.add('visible');
-                document.body.style.overflow = "auto"; // Riattiva scroll
-                reveal(); // Avvia animazioni
+                document.body.style.overflow = "auto"; 
+                reveal(); 
             } else {
                 document.getElementById('error-msg').style.display = 'block';
             }
         }
 
-        // Supporto tasto Enter
         document.getElementById('passcode').addEventListener('keypress', (e) => {
             if (e.key === 'Enter') checkPass();
         });
 
-        // --- TEMA E ANIMAZIONI (Restano uguali) ---
+        // --- TEMA E ANIMAZIONI ---
         const themeToggle = document.getElementById('theme-checkbox');
         const systemDark = window.matchMedia('(prefers-color-scheme: dark)');
         
