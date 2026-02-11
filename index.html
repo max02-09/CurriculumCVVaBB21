@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="it" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Area Riservata</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-color: #fbfbfd;
+            --text-color: #1d1d1f;
+            --text-secondary: #86868b;
+            --card-bg: #ffffff;
+            --accent-color: #0071e3;
+            --nav-bg: rgba(255, 255, 255, 0.8);
+            --border-color: rgba(0,0,0,0.1);
+            --toggle-bg: #e5e5ea;
+        }
+
+        [data-theme="dark"] {
+            --bg-color: #161617;
+            --text-color: #f5f5f7;
+            --text-secondary: #a1a1a6;
+            --card-bg: #2d2d2e;
+            --accent-color: #2997ff;
+            --nav-bg: rgba(22, 22, 23, 0.8);
+            --border-color: rgba(255,255,255,0.1);
+            --toggle-bg: #3a3a3c;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', sans-serif; }
+
+        /* --- LOGICA DI ACCESSO --- */
+        #access-denied {
+            display: flex;
+            height: 100vh;
+            align-items: center;
+            justify-content: center;
+            background: var(--bg-color);
+            color: var(--text-color);
+            text-align: center;
+            padding: 20px;
+        }
+
+        #main-content {
+            display: none; /* Nascosto di default */
+        }
+        /* ------------------------- */
+
+        body { background-color: var(--bg-color); color: var(--text-color); line-height: 1.5; overflow-x: hidden; scroll-behavior: smooth; }
+        nav { position: fixed; top: 0; width: 100%; height: 52px; background: var(--nav-bg); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); z-index: 1000; display: flex; justify-content: space-between; align-items: center; padding: 0 10%; border-bottom: 1px solid var(--border-color); }
+        .nav-links a { color: var(--text-color); text-decoration: none; font-size: 12px; margin-right: 20px; opacity: 0.8; }
+        .theme-switch-wrapper { display: flex; align-items: center; }
+        .theme-switch { display: inline-block; height: 24px; position: relative; width: 46px; }
+        .theme-switch input { display: none; }
+        .slider { background-color: var(--toggle-bg); bottom: 0; cursor: pointer; left: 0; position: absolute; right: 0; top: 0; transition: .4s; border-radius: 34px; }
+        .slider:before { background-color: #fff; bottom: 3px; content: ""; height: 18px; left: 4px; position: absolute; transition: .4s cubic-bezier(0.4, 0, 0.2, 1); width: 18px; border-radius: 50%; box-shadow: 0 2px 4px rgba(0,0,0,0.2); }
+        input:checked + .slider { background-color: var(--accent-color); }
+        input:checked + .slider:before { transform: translateX(20px); }
+
+        .hero { height: 100vh; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; }
+        .hero h1 { font-size: clamp(40px, 8vw, 72px); font-weight: 600; letter-spacing: -0.02em; }
+        section { padding: 100px 10%; max-width: 1200px; margin: 0 auto; }
+        .card { background: var(--card-bg); padding: 35px; border-radius: 28px; border: 1px solid var(--border-color); margin-bottom: 25px; }
+        .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 25px; }
+        .qr-frame { background: white; padding: 20px; display: inline-block; border-radius: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); }
+        .contact-button { display: flex; align-items: center; justify-content: center; width: 100%; max-width: 350px; padding: 16px; margin: 10px auto; background: var(--card-bg); border: 1px solid var(--border-color); border-radius: 16px; text-decoration: none; color: var(--text-color); font-weight: 600; }
+        .reveal { opacity: 0; transform: translateY(30px); transition: all 0.8s ease-out; }
+        .reveal.active { opacity: 1; transform: translateY(0); }
+    </style>
+</head>
+<body>
+
+    <!-- Schermata Errore Finto -->
+    <div id="access-denied">
+        <div>
+            <h1 style="font-size: 64px;">404</h1>
+            <p>La pagina che stai cercando non esiste o è stata spostata.</p>
+        </div>
+    </div>
+
+    <!-- Contenuto Reale (Protetto) -->
+    <div id="main-content">
+        <nav>
+            <div class="nav-links">
+                <a href="#cv">Curriculum</a>
+                <a href="#connect">Contatti</a>
+            </div>
+            <div class="theme-switch-wrapper">
+                <label class="theme-switch" for="checkbox">
+                    <input type="checkbox" id="checkbox" />
+                    <div class="slider"></div>
+                </label>
+            </div>
+        </nav>
+
+        <section class="hero">
+            <h1 class="reveal">Benvenuto nel mio Profilo.</h1>
+            <p class="reveal" style="color:var(--text-secondary)">Contenuto esclusivo tramite QR Code.</p>
+        </section>
+
+        <section id="cv">
+            <div class="card reveal">
+                <h3>Esperienza & Istruzione</h3>
+                <p>Qui inserisci i tuoi dati sensibili che vuoi mostrare solo a chi ha scansionato il QR.</p>
+            </div>
+            <div class="grid">
+                <div class="card reveal"><h3>Hard Skills</h3><p>Python, Design, AI</p></div>
+                <div class="card reveal"><h3>Soft Skills</h3><p>Problem Solving</p></div>
+            </div>
+        </section>
+
+        <section id="connect" style="text-align: center;">
+            <h2 class="reveal">Contatti Diretti</h2>
+            <a href="mailto:tuo@email.com" class="contact-button reveal">Email</a>
+            <a href="#" class="contact-button reveal">LinkedIn</a>
+            
+            <div class="qr-container reveal" style="margin-top: 50px;">
+                <p style="margin-bottom: 20px;">Il tuo QR Code personale:</p>
+                <div class="qr-frame">
+                    <img id="qr-image" src="" alt="QR Code">
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <script>
+        // --- LOGICA DI SICUREZZA ---
+        const SECRET_KEY = "access";
+        const SECRET_VALUE = "pro"; // Sostituisci "pro" con quello che vuoi tu
+
+        const urlParams = new URLSearchParams(window.location.search);
+        
+        if (urlParams.get(SECRET_KEY) === SECRET_VALUE) {
+            document.getElementById('access-denied').style.display = 'none';
+            document.getElementById('main-content').style.display = 'block';
+            document.title = "Il Mio Portfolio | Nome";
+        }
+
+        // --- GENERAZIONE QR CON CHIAVE ---
+        const qrImg = document.getElementById('qr-image');
+        // Il QR genererà il link: tuosito.it?access=pro
+        const secureURL = window.location.origin + window.location.pathname + `?${SECRET_KEY}=${SECRET_VALUE}`;
+        qrImg.src = `https://api.qrserver.com/v1/create-qr-code/?size=180x180&data=${encodeURIComponent(secureURL)}`;
+
+        // --- LOGICA TEMA E REVEAL (Precedenti) ---
+        const toggleSwitch = document.querySelector('.theme-switch input[type="checkbox"]');
+        function switchTheme(theme) {
+            document.documentElement.setAttribute('data-theme', theme);
+            localStorage.setItem('theme', theme);
+            toggleSwitch.checked = (theme === 'dark');
+        }
+        toggleSwitch.addEventListener('change', (e) => switchTheme(e.target.checked ? 'dark' : 'light'));
+        
+        function reveal() {
+            const reveals = document.querySelectorAll(".reveal");
+            reveals.forEach(el => {
+                if (el.getBoundingClientRect().top < window.innerHeight - 100) el.classList.add("active");
+            });
+        }
+        window.addEventListener("scroll", reveal);
+        setTimeout(reveal, 200); // Ritardo per permettere al display:block di attivarsi
+    </script>
+</body>
+</html>
