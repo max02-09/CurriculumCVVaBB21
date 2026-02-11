@@ -3,134 +3,257 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="robots" content="noindex, nofollow"> <!-- Impedisce la ricerca su Google -->
-    <title>Accesso Riservato</title>
+    <!-- PRIVACY: Impedisce a Google di trovare il sito -->
+    <meta name="robots" content="noindex, nofollow">
+    <title>Area Riservata | Nome Profilo</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
     <style>
         :root {
             --bg-color: #fbfbfd;
             --text-color: #1d1d1f;
+            --text-secondary: #86868b;
+            --card-bg: #ffffff;
             --accent-color: #0071e3;
-            --glass-bg: rgba(255, 255, 255, 0.8);
+            --nav-bg: rgba(255, 255, 255, 0.8);
             --border-color: rgba(0,0,0,0.1);
+            --toggle-bg: #e5e5ea;
         }
 
         [data-theme="dark"] {
             --bg-color: #161617;
             --text-color: #f5f5f7;
+            --text-secondary: #a1a1a6;
+            --card-bg: #2d2d2e;
             --accent-color: #2997ff;
-            --glass-bg: rgba(22, 22, 23, 0.8);
+            --nav-bg: rgba(22, 22, 23, 0.8);
             --border-color: rgba(255,255,255,0.1);
+            --toggle-bg: #3a3a3c;
         }
 
-        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', sans-serif; }
-
-        /* Schermata di Protezione */
-        #gate {
-            position: fixed;
-            top: 0; left: 0; width: 100%; height: 100%;
-            background: var(--bg-color);
-            z-index: 9999;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            transition: opacity 0.8s ease, visibility 0.8s;
+        * {
+            margin: 0; padding: 0; box-sizing: border-box;
+            font-family: 'Inter', -apple-system, sans-serif;
+            transition: background-color 0.4s ease, color 0.4s ease;
         }
 
-        #gate.hidden { opacity: 0; visibility: hidden; }
-
-        .gate-content { text-align: center; max-width: 300px; }
-        .gate-content h2 { font-weight: 600; margin-bottom: 20px; letter-spacing: -0.02em; }
-        
-        .gate-input {
-            width: 100%;
-            padding: 12px;
-            border-radius: 12px;
-            border: 1px solid var(--border-color);
-            background: var(--bg-color);
+        body {
+            background-color: var(--bg-color);
             color: var(--text-color);
-            text-align: center;
-            font-size: 18px;
-            outline: none;
-            margin-bottom: 15px;
+            overflow-x: hidden;
+            scroll-behavior: smooth;
         }
 
+        /* --- SCHERMATA DI SICUREZZA (GATE) --- */
+        #gate {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: var(--bg-color); z-index: 9999;
+            display: flex; flex-direction: column; justify-content: center; align-items: center;
+            transition: opacity 0.8s cubic-bezier(0.4, 0, 0.2, 1), visibility 0.8s;
+        }
+        #gate.hidden { opacity: 0; visibility: hidden; }
+        .gate-content { text-align: center; width: 90%; max-width: 320px; }
+        .gate-content h2 { font-size: 24px; font-weight: 600; margin-bottom: 20px; }
+        .gate-input {
+            width: 100%; padding: 16px; border-radius: 12px; border: 1px solid var(--border-color);
+            background: var(--card-bg); color: var(--text-color); font-size: 18px;
+            text-align: center; outline: none; margin-bottom: 15px;
+        }
         .gate-btn {
-            background: var(--accent-color);
-            color: white;
-            padding: 10px 20px;
-            border-radius: 980px;
-            border: none;
-            cursor: pointer;
-            font-size: 14px;
+            background: var(--accent-color); color: white; padding: 12px 30px;
+            border-radius: 980px; border: none; cursor: pointer; font-weight: 600; width: 100%;
         }
 
-        /* Il resto del sito è nascosto inizialmente */
-        #main-content { display: none; }
-        #main-content.visible { display: block; }
+        /* --- CONTENUTO DEL SITO (Inizialmente nascosto) --- */
+        #main-content { opacity: 0; pointer-events: none; transition: opacity 1s ease; }
+        #main-content.visible { opacity: 1; pointer-events: auto; }
 
-        /* (Qui mantieni tutto il resto del CSS del curriculum che ti ho dato prima...) */
-        /* Per brevità ho omesso il CSS grafico, ma tu usa quello completo precedente */
-        body { background-color: var(--bg-color); color: var(--text-color); }
-        section { padding: 100px 10%; text-align: center; }
-        .card { background: white; padding: 30px; border-radius: 20px; margin: 20px 0; border: 1px solid var(--border-color); }
-        [data-theme="dark"] .card { background: #2d2d2e; }
-        .contact-button { display: block; padding: 15px; background: var(--accent-color); color: white; border-radius: 10px; text-decoration: none; margin: 10px auto; max-width: 200px; }
+        /* Navigazione */
+        nav {
+            position: fixed; top: 0; width: 100%; height: 52px;
+            background: var(--nav-bg); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
+            z-index: 1000; display: flex; justify-content: space-between; align-items: center;
+            padding: 0 10%; border-bottom: 1px solid var(--border-color);
+        }
+        .nav-links a { color: var(--text-color); text-decoration: none; font-size: 12px; margin-right: 20px; opacity: 0.8; }
+
+        /* Toggle Tema */
+        .theme-switch { display: inline-block; height: 24px; position: relative; width: 46px; }
+        .theme-switch input { display: none; }
+        .slider { background-color: var(--toggle-bg); cursor: pointer; position: absolute; top: 0; left: 0; right: 0; bottom: 0; transition: .4s; border-radius: 34px; }
+        .slider:before { background-color: #fff; bottom: 3px; content: ""; height: 18px; left: 4px; position: absolute; transition: .4s; width: 18px; border-radius: 50%; }
+        input:checked + .slider { background-color: var(--accent-color); }
+        input:checked + .slider:before { transform: translateX(20px); }
+
+        /* Struttura Pagine */
+        section { padding: 100px 10%; max-width: 1200px; margin: 0 auto; }
+        .hero { height: 100vh; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; }
+        .hero h1 { font-size: clamp(40px, 8vw, 72px); font-weight: 600; letter-spacing: -0.02em; }
+        .hero p { color: var(--text-secondary); font-size: 24px; margin-top: 10px; }
+
+        .card { background: var(--card-bg); padding: 35px; border-radius: 28px; border: 1px solid var(--border-color); margin-bottom: 25px; }
+        .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 25px; }
+        
+        /* Liste Skill */
+        ul { list-style: none; color: var(--text-secondary); }
+        li { margin-bottom: 8px; position: relative; padding-left: 20px; }
+        li::before { content: '•'; color: var(--accent-color); position: absolute; left: 0; font-weight: bold; }
+
+        /* QR e Bottoni Contatto */
+        .qr-container { text-align: center; padding: 60px 20px; }
+        .qr-frame { background: white; padding: 20px; display: inline-block; border-radius: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); }
+        .qr-frame img { width: 150px; height: 150px; }
+
+        .contact-button {
+            display: flex; align-items: center; justify-content: center; width: 100%; max-width: 350px;
+            padding: 16px; margin: 10px auto; background: var(--card-bg); border: 1px solid var(--border-color);
+            border-radius: 16px; text-decoration: none; color: var(--text-color); font-weight: 600;
+        }
+
+        .reveal { opacity: 0; transform: translateY(30px); transition: all 0.8s ease-out; }
+        .reveal.active { opacity: 1; transform: translateY(0); }
+
+        footer { padding: 40px; text-align: center; font-size: 12px; color: var(--text-secondary); border-top: 1px solid var(--border-color); }
     </style>
 </head>
-<body>
+<body style="overflow: hidden;"> <!-- Bloccato finché non si accede -->
 
-    <!-- Schermata Gate -->
+    <!-- SCHERMATA DI ACCESSO -->
     <div id="gate">
         <div class="gate-content">
-            <h2>Area Riservata</h2>
-            <input type="password" id="passcode" class="gate-input" placeholder="Inserisci codice">
-            <button onclick="checkPass()" class="gate-btn">Accedi</button>
-            <p id="error" style="color: red; font-size: 12px; margin-top: 10px; display: none;">Codice errato</p>
+            <h2 id="gate-title">Area Riservata</h2>
+            <input type="password" id="passcode" class="gate-input" placeholder="Codice d'accesso">
+            <button onclick="checkPass()" class="gate-btn">Sblocca</button>
+            <p id="error-msg" style="color: #ff3b30; font-size: 13px; margin-top: 15px; display: none;">Codice non valido. Riprova.</p>
         </div>
     </div>
 
-    <!-- Contenuto Reale -->
+    <!-- CONTENUTO PRINCIPALE -->
     <div id="main-content">
-        <section>
-            <h1>Ciao, sono [Il Tuo Nome]</h1>
-            <p>Questo contenuto è visibile solo tramite scansione QR autorizzata.</p>
-            <div class="card">
-                <h3>Esperienze Private</h3>
-                <p>Dettaglio 1...</p>
-                <p>Dettaglio 2...</p>
+        <nav>
+            <div class="nav-links">
+                <a href="#cv">Esperienza</a>
+                <a href="#connect">Contatti</a>
             </div>
-            <div id="connect">
-                <a href="mailto:esempio@mail.it" class="contact-button">Contattami</a>
+            <div class="theme-switch-wrapper">
+                <label class="theme-switch">
+                    <input type="checkbox" id="theme-checkbox">
+                    <div class="slider"></div>
+                </label>
+            </div>
+        </nav>
+
+        <section class="hero">
+            <h1 class="reveal">Benvenuto.</h1>
+            <p class="reveal">Profilo Professionale Privato</p>
+        </section>
+
+        <section id="cv">
+            <div class="card reveal">
+                <h3>Esperienza Professionale</h3>
+                <p>Descrizione del tuo ruolo attuale e dei tuoi successi.</p>
+            </div>
+
+            <div class="grid">
+                <div class="card reveal">
+                    <h3>Hard Skills</h3>
+                    <ul>
+                        <li>Sviluppo Web / AI</li>
+                        <li>Project Management</li>
+                        <li>Design Industriale</li>
+                    </ul>
+                </div>
+                <div class="card reveal">
+                    <h3>Istruzione</h3>
+                    <ul>
+                        <li>Laurea in Ingegneria</li>
+                        <li>Master in Digital Innovation</li>
+                    </ul>
+                </div>
             </div>
         </section>
+
+        <section class="qr-container reveal">
+            <h2>Salva Contatto</h2>
+            <div class="qr-frame">
+                <img id="qr-image" src="" alt="QR Code">
+            </div>
+        </section>
+
+        <section id="connect" style="text-align: center;">
+            <h2 class="reveal">Connettiamoci.</h2>
+            <a href="mailto:info@tuonome.it" class="contact-button reveal">✉️ Invia Email</a>
+            <a href="tel:+39123456789" class="contact-button reveal">📞 Chiama</a>
+            <a href="#" class="contact-button reveal">🔗 LinkedIn</a>
+        </section>
+
+        <footer>
+            &copy; 2024 Nome Cognome. Accesso autorizzato tramite QR.
+        </footer>
     </div>
 
     <script>
-        // CODICE DI ACCESSO
-        const SECRET_CODE = "1234"; // Cambialo con quello che vuoi tu
+        // --- CONFIGURAZIONE SICUREZZA ---
+        const MY_PASSCODE = "1234"; // CAMBIA QUESTO CODICE!
 
         function checkPass() {
             const input = document.getElementById('passcode').value;
-            if(input === SECRET_CODE) {
-                document.getElementById('gate').classList.add('hidden');
-                document.getElementById('main-content').classList.add('visible');
-                // Sblocca lo scroll del body
+            const gate = document.getElementById('gate');
+            const content = document.getElementById('main-content');
+            const error = document.getElementById('error-msg');
+
+            if(input === MY_PASSCODE) {
+                gate.classList.add('hidden');
+                content.classList.add('visible');
                 document.body.style.overflow = "auto";
+                // Attiva le animazioni dopo l'ingresso
+                setTimeout(reveal, 400);
             } else {
-                document.getElementById('error').style.display = 'block';
+                error.style.display = 'block';
+                // Effetto vibrazione semplice
+                document.getElementById('passcode').style.borderColor = "#ff3b30";
             }
         }
 
-        // Blocca lo scroll all'inizio
-        document.body.style.overflow = "hidden";
-
-        // Gestione invio con tasto Enter
-        document.getElementById('passcode').addEventListener('keypress', function (e) {
+        // Gestione tasto Invio
+        document.getElementById('passcode').addEventListener('keypress', (e) => {
             if (e.key === 'Enter') checkPass();
         });
+
+        // --- LOGICA TEMA ---
+        const themeToggle = document.getElementById('theme-checkbox');
+        const currentTheme = localStorage.getItem('theme');
+
+        function applyTheme(theme) {
+            document.documentElement.setAttribute('data-theme', theme);
+            localStorage.setItem('theme', theme);
+            themeToggle.checked = (theme === 'dark');
+        }
+
+        if (currentTheme) applyTheme(currentTheme);
+        else if (window.matchMedia('(prefers-color-scheme: dark)').matches) applyTheme('dark');
+
+        themeToggle.addEventListener('change', (e) => {
+            applyTheme(e.target.checked ? 'dark' : 'light');
+        });
+
+        // --- QR CODE GENERATOR ---
+        const qrImg = document.getElementById('qr-image');
+        const currentURL = window.location.origin + window.location.pathname + '#connect';
+        qrImg.src = `https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=${encodeURIComponent(currentURL)}`;
+
+        // --- REVEAL ANIMATION ---
+        function reveal() {
+            const reveals = document.querySelectorAll(".reveal");
+            reveals.forEach(el => {
+                const windowHeight = window.innerHeight;
+                if (el.getBoundingClientRect().top < windowHeight - 100) {
+                    el.classList.add("active");
+                }
+            });
+        }
+        window.addEventListener("scroll", reveal);
     </script>
 </body>
 </html>
+
 
