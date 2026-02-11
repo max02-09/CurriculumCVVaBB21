@@ -1,11 +1,12 @@
 <!DOCTYPE html>
-<html lang="it" data-theme="light">
+<html lang="it">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Area Riservata</title>
+    <title>Nome Profilo | Digital Business Card</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
     <style>
+        /* Variabili Colore */
         :root {
             --bg-color: #fbfbfd;
             --text-color: #1d1d1f;
@@ -28,28 +29,48 @@
             --toggle-bg: #3a3a3c;
         }
 
-        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', sans-serif; }
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            transition: background-color 0.4s cubic-bezier(0.4, 0, 0.2, 1), color 0.4s ease;
+        }
 
-        /* --- LOGICA DI ACCESSO --- */
-        #access-denied {
-            display: flex;
-            height: 100vh;
-            align-items: center;
-            justify-content: center;
-            background: var(--bg-color);
+        body {
+            background-color: var(--bg-color);
             color: var(--text-color);
-            text-align: center;
-            padding: 20px;
+            line-height: 1.5;
+            overflow-x: hidden;
+            scroll-behavior: smooth;
         }
 
-        #main-content {
-            display: none; /* Nascosto di default */
+        /* Navigazione */
+        nav {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            height: 52px;
+            background: var(--nav-bg);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            z-index: 1000;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 10%;
+            border-bottom: 1px solid var(--border-color);
         }
-        /* ------------------------- */
 
-        body { background-color: var(--bg-color); color: var(--text-color); line-height: 1.5; overflow-x: hidden; scroll-behavior: smooth; }
-        nav { position: fixed; top: 0; width: 100%; height: 52px; background: var(--nav-bg); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); z-index: 1000; display: flex; justify-content: space-between; align-items: center; padding: 0 10%; border-bottom: 1px solid var(--border-color); }
-        .nav-links a { color: var(--text-color); text-decoration: none; font-size: 12px; margin-right: 20px; opacity: 0.8; }
+        .nav-links a {
+            color: var(--text-color);
+            text-decoration: none;
+            font-size: 12px;
+            margin-right: 20px;
+            opacity: 0.8;
+        }
+
+        /* Toggle Tema */
         .theme-switch-wrapper { display: flex; align-items: center; }
         .theme-switch { display: inline-block; height: 24px; position: relative; width: 46px; }
         .theme-switch input { display: none; }
@@ -58,108 +79,309 @@
         input:checked + .slider { background-color: var(--accent-color); }
         input:checked + .slider:before { transform: translateX(20px); }
 
+        /* Contenuto */
         .hero { height: 100vh; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; }
         .hero h1 { font-size: clamp(40px, 8vw, 72px); font-weight: 600; letter-spacing: -0.02em; }
+        .hero p { color: var(--text-secondary); font-size: 24px; margin-top: 10px; }
+
         section { padding: 100px 10%; max-width: 1200px; margin: 0 auto; }
-        .card { background: var(--card-bg); padding: 35px; border-radius: 28px; border: 1px solid var(--border-color); margin-bottom: 25px; }
-        .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 25px; }
-        .qr-frame { background: white; padding: 20px; display: inline-block; border-radius: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); }
-        .contact-button { display: flex; align-items: center; justify-content: center; width: 100%; max-width: 350px; padding: 16px; margin: 10px auto; background: var(--card-bg); border: 1px solid var(--border-color); border-radius: 16px; text-decoration: none; color: var(--text-color); font-weight: 600; }
+        .section-title { font-size: clamp(30px, 5vw, 48px); font-weight: 600; text-align: center; margin-bottom: 60px; }
+        
+        .grid { 
+            display: grid; 
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); 
+            gap: 25px; 
+            margin-top: 40px;
+        }
+        @media (min-width: 768px) {
+            .grid-2-cols { grid-template-columns: repeat(2, 1fr); }
+            .grid-3-cols { grid-template-columns: repeat(3, 1fr); }
+        }
+
+
+        .card { 
+            background: var(--card-bg); 
+            padding: 35px; 
+            border-radius: 28px; 
+            border: 1px solid var(--border-color); 
+            margin-bottom: 0px; /* Rimossa per il grid */
+            display: flex; /* Per allineare icona e testo */
+            flex-direction: column;
+            justify-content: space-between;
+            transition: transform 0.3s ease-in-out;
+        }
+        .card:hover {
+            transform: translateY(-5px);
+        }
+
+        .card h3 {
+            font-size: 22px;
+            margin-bottom: 10px;
+            line-height: 1.3;
+        }
+        .card p {
+            color: var(--text-secondary);
+            font-size: 16px;
+        }
+        .card ul {
+            list-style: none;
+            padding-left: 0;
+            color: var(--text-secondary);
+            font-size: 16px;
+        }
+        .card ul li {
+            margin-bottom: 8px;
+            display: flex;
+            align-items: flex-start;
+        }
+        .card ul li::before {
+            content: '•'; /* Punto elenco personalizzato */
+            color: var(--accent-color);
+            display: inline-block;
+            width: 1em;
+            margin-left: -1em;
+            font-weight: bold;
+        }
+
+
+        /* QR Code Section */
+        .qr-container { text-align: center; padding: 60px 20px; background: var(--bg-color); }
+        .qr-frame { 
+            background: white; 
+            padding: 20px; 
+            display: inline-block; 
+            border-radius: 20px; 
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            margin-bottom: 20px;
+        }
+        .qr-frame img { width: 150px; height: 150px; display: block; }
+
+        /* Sezione Contatti Finale (Target QR) */
+        #connect { 
+            background: var(--bg-color); 
+            min-height: 100vh; 
+            display: flex; 
+            flex-direction: column; 
+            align-items: center; 
+            justify-content: center;
+            text-align: center;
+            padding: 50px 20px;
+        }
+        .contact-button {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 100%;
+            max-width: 350px;
+            padding: 16px;
+            margin: 10px 0;
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            text-decoration: none;
+            color: var(--text-color);
+            font-weight: 600;
+            transition: transform 0.2s ease;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.05); /* Lieve ombra */
+        }
+        .contact-button:hover { transform: translateY(-3px); box-shadow: 0 6px 15px rgba(0,0,0,0.08); }
+        .contact-button svg { margin-right: 10px; width: 20px; height: 20px; fill: currentColor; } /* Stile SVG */
+
+
         .reveal { opacity: 0; transform: translateY(30px); transition: all 0.8s ease-out; }
         .reveal.active { opacity: 1; transform: translateY(0); }
+
+        footer { padding: 40px; text-align: center; font-size: 12px; color: var(--text-secondary); border-top: 1px solid var(--border-color); }
     </style>
 </head>
 <body>
 
-    <!-- Schermata Errore Finto -->
-    <div id="access-denied">
-        <div>
-            <h1 style="font-size: 64px;">404</h1>
-            <p>La pagina che stai cercando non esiste o è stata spostata.</p>
+    <nav>
+        <div class="nav-links">
+            <a href="#about">Chi Sono</a>
+            <a href="#cv">Curriculum</a>
+            <a href="#connect">Contatti</a>
         </div>
-    </div>
+        <div class="theme-switch-wrapper">
+            <label class="theme-switch" for="checkbox">
+                <input type="checkbox" id="checkbox" />
+                <div class="slider"></div>
+            </label>
+        </div>
+    </nav>
 
-    <!-- Contenuto Reale (Protetto) -->
-    <div id="main-content">
-        <nav>
-            <div class="nav-links">
-                <a href="#cv">Curriculum</a>
-                <a href="#connect">Contatti</a>
-            </div>
-            <div class="theme-switch-wrapper">
-                <label class="theme-switch" for="checkbox">
-                    <input type="checkbox" id="checkbox" />
-                    <div class="slider"></div>
-                </label>
-            </div>
-        </nav>
+    <section class="hero">
+        <h1 class="reveal">Il tuo Nome Cognome.</h1>
+        <p class="reveal">Sviluppatore AI | UX Designer | Ingegnere.</p>
+    </section>
 
-        <section class="hero">
-            <h1 class="reveal">Benvenuto nel mio Profilo.</h1>
-            <p class="reveal" style="color:var(--text-secondary)">Contenuto esclusivo tramite QR Code.</p>
-        </section>
+    <section id="about">
+        <div class="card reveal">
+            <h2>Su di Me</h2>
+            <p>Con anni di esperienza nello sviluppo software e nell'ingegneria dei sistemi, sono specializzato nella creazione di soluzioni innovative e intuitive. La mia passione è trasformare idee complesse in prodotti funzionali e esteticamente gradevoli.</p>
+        </div>
+    </section>
 
-        <section id="cv">
+    <section id="cv">
+        <h2 class="section-title reveal">Il Mio Curriculum</h2>
+
+        <!-- Esperienza Professionale -->
+        <div class="card reveal">
+            <h3>Esperienza Professionale</h3>
+            <ul>
+                <li>**[Anno Inizio] – [Anno Fine]** – **[Posizione]** @ [Nome Azienda]
+                    <p>Breve descrizione delle mansioni e dei risultati chiave.</p>
+                </li>
+                <li>**[Anno Inizio] – [Anno Fine]** – **[Posizione]** @ [Nome Azienda]
+                    <p>Breve descrizione delle mansioni e dei risultati chiave.</p>
+                </li>
+            </ul>
+        </div>
+
+        <!-- Istruzione -->
+        <div class="card reveal">
+            <h3>Istruzione</h3>
+            <ul>
+                <li>**[Anno Inizio] – [Anno Fine]** – **[Titolo di Studio]** @ [Nome Università/Istituto]
+                    <p>Specializzazione o tesi di laurea rilevante.</p>
+                </li>
+                <li>**[Anno Inizio] – [Anno Fine]** – **[Titolo di Studio]** @ [Nome Università/Istituto]
+                    <p>Dettagli aggiuntivi.</p>
+                </li>
+            </ul>
+        </div>
+
+        <div class="grid grid-2-cols">
+            <!-- Certificati e Corsi -->
             <div class="card reveal">
-                <h3>Esperienza & Istruzione</h3>
-                <p>Qui inserisci i tuoi dati sensibili che vuoi mostrare solo a chi ha scansionato il QR.</p>
+                <h3>Certificati & Corsi</h3>
+                <ul>
+                    <li>Certificazione [Nome Certificato] - [Ente Rilasciante] ([Anno])</li>
+                    <li>Corso Avanzato di [Nome Corso] - [Piattaforma/Ente] ([Anno])</li>
+                    <li>Licenza/Abilitazione [Nome] ([Anno])</li>
+                </ul>
             </div>
-            <div class="grid">
-                <div class="card reveal"><h3>Hard Skills</h3><p>Python, Design, AI</p></div>
-                <div class="card reveal"><h3>Soft Skills</h3><p>Problem Solving</p></div>
-            </div>
-        </section>
 
-        <section id="connect" style="text-align: center;">
-            <h2 class="reveal">Contatti Diretti</h2>
-            <a href="mailto:tuo@email.com" class="contact-button reveal">Email</a>
-            <a href="#" class="contact-button reveal">LinkedIn</a>
-            
-            <div class="qr-container reveal" style="margin-top: 50px;">
-                <p style="margin-bottom: 20px;">Il tuo QR Code personale:</p>
-                <div class="qr-frame">
-                    <img id="qr-image" src="" alt="QR Code">
-                </div>
+            <!-- Hard Skills -->
+            <div class="card reveal">
+                <h3>Hard Skills</h3>
+                <ul>
+                    <li>**Linguaggi:** Python, JavaScript, C++, SQL</li>
+                    <li>**Framework:** React, Django, TensorFlow</li>
+                    <li>**Strumenti:** Docker, Git, AWS, Figma</li>
+                    <li>**Design:** UI/UX Principles, Prototyping</li>
+                </ul>
             </div>
-        </section>
-    </div>
+        </div>
+
+        <div class="grid grid-2-cols">
+            <!-- Soft Skills -->
+            <div class="card reveal">
+                <h3>Soft Skills</h3>
+                <ul>
+                    <li>Problem Solving</li>
+                    <li>Comunicazione Efficace</li>
+                    <li>Lavoro di Squadra</li>
+                    <li>Adattabilità</li>
+                    <li>Leadership</li>
+                </ul>
+            </div>
+
+            <!-- Patente di Guida -->
+            <div class="card reveal">
+                <h3>Patente di Guida</h3>
+                <ul>
+                    <li>Categoria B (Automobili)</li>
+                    <li>Disponibile a viaggiare per incarichi professionali.</li>
+                </ul>
+            </div>
+        </div>
+    </section>
+
+    <!-- Sezione QR Code -->
+    <section class="qr-container reveal">
+        <h2 class="section-title">Portami con te</h2>
+        <p style="color: var(--text-secondary); margin-bottom: 30px;">Scansiona per salvare i miei contatti sul tuo smartphone</p>
+        <div class="qr-frame">
+            <img id="qr-image" src="" alt="QR Code Contatti">
+        </div>
+    </section>
+
+    <!-- Sezione Contatti Unica (Target QR) -->
+    <section id="connect">
+        <h2 class="reveal" style="font-size: clamp(30px, 5vw, 42px); margin-bottom: 10px;">Connettiamoci.</h2>
+        <p class="reveal" style="color: var(--text-secondary); margin-bottom: 40px;">Seleziona il metodo che preferisci per contattarmi</p>
+        
+        <a href="mailto:info@tuonome.it" class="contact-button reveal">
+            <!-- Icona email SVG - Potrebbe essere sostituita con Font Awesome o simile -->
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M22 6c0-1.1-.9-2-2-2H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6zm-2 0l-8 5-8-5h16zm0 12H4V8l8 5 8-5v10z"/></svg>
+            Invia Email
+        </a>
+        <a href="tel:+39123456789" class="contact-button reveal">
+            <!-- Icona telefono SVG -->
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 15.5c-1.25 0-2.45-.2-3.57-.57-.35-.11-.74-.03-1.01.24l-2.2 2.2c-2.83-1.44-5.15-3.75-6.59-6.59l2.2-2.2c.27-.27.36-.65.24-1.01C8.7 6.45 8.5 5.25 8.5 4c0-.55-.45-1-1-1H4c-.55 0-1 .45-1 1 0 9.39 7.61 17 17 17 .55 0 1-.45 1-1v-3.5c0-.55-.45-1-1-1z"/></svg>
+            Chiama
+        </a>
+        <a href="https://www.linkedin.com/in/tuoprofilo" target="_blank" class="contact-button reveal">
+            <!-- Icona LinkedIn SVG - Sostituisci il link -->
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"/></svg>
+            LinkedIn
+        </a>
+        <a href="https://wa.me/39123456789" target="_blank" class="contact-button reveal">
+            <!-- Icona WhatsApp SVG -->
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12.04 2c-5.46 0-9.9 4.44-9.9 9.9 0 1.77.46 3.45 1.25 4.9L2 22l5.21-1.38c1.45.75 3.08 1.16 4.83 1.16 5.46 0 9.9-4.44 9.9-9.9S17.5 2 12.04 2zm5.08 14.86c-.16.29-.53.38-.85.2s-.54-.37-.7-.66c-.14-.29-.69-.87-.87-.97-.19-.11-.38-.15-.56.12-.19.27-.72.93-.89 1.13-.17.2-.33.22-.61.08-.28-.15-1.15-.42-2.2-1.32-1.63-1.42-2.73-3.03-3.05-3.58-.32-.55-.03-.85.25-1.12.25-.26.56-.63.85-.94.29-.31.39-.52.58-.87.19-.35.1-.66-.04-.92-.14-.26-.56-1.34-.77-1.81-.2-.46-.38-.4-.56-.4-.18 0-.38-.03-.58-.03-.19 0-.53.07-.81.36-.29.28-1.11 1.08-1.11 2.63s1.14 3.05 1.3 3.26c.16.21 2.22 3.39 5.37 4.79 3.09 1.37 3.87 1.16 4.57.97.7-.19 1.15-.78 1.32-1.48.17-.69.17-1.29.12-1.38-.06-.09-.2-.15-.42-.27z"/></svg>
+            WhatsApp
+        </a>
+        
+        <a href="#" style="margin-top: 40px; color: var(--accent-color); text-decoration: none;" class="reveal">Scarica vCard (.vcf)</a>
+    </section>
+
+    <footer>
+        &copy; 2024 Il Tuo Nome. Progettato con eleganza e cura.
+    </footer>
 
     <script>
-        // --- LOGICA DI SICUREZZA ---
-        const SECRET_KEY = "access";
-        const SECRET_VALUE = "pro"; // Sostituisci "pro" con quello che vuoi tu
-
-        const urlParams = new URLSearchParams(window.location.search);
-        
-        if (urlParams.get(SECRET_KEY) === SECRET_VALUE) {
-            document.getElementById('access-denied').style.display = 'none';
-            document.getElementById('main-content').style.display = 'block';
-            document.title = "Il Mio Portfolio | Nome";
-        }
-
-        // --- GENERAZIONE QR CON CHIAVE ---
-        const qrImg = document.getElementById('qr-image');
-        // Il QR genererà il link: tuosito.it?access=pro
-        const secureURL = window.location.origin + window.location.pathname + `?${SECRET_KEY}=${SECRET_VALUE}`;
-        qrImg.src = `https://api.qrserver.com/v1/create-qr-code/?size=180x180&data=${encodeURIComponent(secureURL)}`;
-
-        // --- LOGICA TEMA E REVEAL (Precedenti) ---
+        // Logica Tema
         const toggleSwitch = document.querySelector('.theme-switch input[type="checkbox"]');
+        const currentTheme = localStorage.getItem('theme');
+        const systemDarkMode = window.matchMedia('(prefers-color-scheme: dark)');
+
         function switchTheme(theme) {
             document.documentElement.setAttribute('data-theme', theme);
             localStorage.setItem('theme', theme);
             toggleSwitch.checked = (theme === 'dark');
         }
-        toggleSwitch.addEventListener('change', (e) => switchTheme(e.target.checked ? 'dark' : 'light'));
-        
+
+        if (currentTheme) {
+            switchTheme(currentTheme);
+        } else if (systemDarkMode.matches) {
+            switchTheme('dark');
+        }
+
+        toggleSwitch.addEventListener('change', (e) => {
+            switchTheme(e.target.checked ? 'dark' : 'light');
+        });
+
+        // Generatore QR Code Automatico
+        const qrImg = document.getElementById('qr-image');
+        // Usa window.location.origin per prendere solo l'URL base (es. https://tuosito.it)
+        // E aggiunge l'hash #connect per puntare alla sezione contatti
+        const currentURL = window.location.origin + window.location.pathname + '#connect';
+        qrImg.src = `https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=${encodeURIComponent(currentURL)}`;
+
+        // Reveal Animation
         function reveal() {
             const reveals = document.querySelectorAll(".reveal");
             reveals.forEach(el => {
-                if (el.getBoundingClientRect().top < window.innerHeight - 100) el.classList.add("active");
+                const windowHeight = window.innerHeight;
+                // Modificato a 100 per attivare prima l'animazione
+                if (el.getBoundingClientRect().top < windowHeight - 100) { 
+                    el.classList.add("active");
+                }
             });
         }
         window.addEventListener("scroll", reveal);
-        setTimeout(reveal, 200); // Ritardo per permettere al display:block di attivarsi
+        reveal();
     </script>
 </body>
 </html>
